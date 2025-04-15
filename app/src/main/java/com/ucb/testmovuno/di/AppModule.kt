@@ -9,6 +9,7 @@ import com.ucb.framework.book.BookRemoteDataSource
 import com.ucb.framework.service.IApiService
 import com.ucb.framework.service.RetrofitClient
 import com.ucb.usecases.AddToMyFavorites
+import com.ucb.usecases.GetMyFavoriteBooks
 import com.ucb.usecases.SearchBooks
 import dagger.Module
 import dagger.Provides
@@ -54,6 +55,12 @@ object AppModule {
     @Singleton
     fun provideAddToMyFavorites(repository: BookRepository): AddToMyFavorites {
         return AddToMyFavorites(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetMyFavoriteBooks(repository: BookRepository): GetMyFavoriteBooks {
+        return GetMyFavoriteBooks(repository)
     }
 
 }
