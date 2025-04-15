@@ -30,7 +30,8 @@ class SearchBooksViewModel @Inject constructor(
         viewModelScope.launch {
             _flow.value = BookState.Loading
             val result = searchBooks.invoke(query)
-            _flow.value = BookState.Successful(result)
+            val uniqueBooks = result.distinctBy { it.title to it.authors.joinToString() }
+            _flow.value = BookState.Successful(uniqueBooks)
         }
     }
 
