@@ -1,12 +1,14 @@
 package com.ucb.usecases
 
+import com.ucb.data.BookRepository
 import com.ucb.domain.Book
+import kotlinx.coroutines.delay
 
-class SearchBooks {
-    fun invoke(toSearch: String): List<Book> {
-        return listOf(
-            Book(listOf("neni"), "el denil", "2025"),
-            Book(listOf("boris", "redo", "guichi'"), "los reales", "2024")
-        )
+class SearchBooks (
+    val bookRepository: BookRepository
+) {
+    suspend fun invoke(toSearch: String): List<Book> {
+        delay(100)
+        return bookRepository.searchByQuery(toSearch)
     }
 }
