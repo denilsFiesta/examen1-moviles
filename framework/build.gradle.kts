@@ -1,7 +1,9 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
 }
+
 
 android {
     namespace = "com.ucb.framework"
@@ -37,7 +39,25 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.firebase.messaging)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.retrofit)
+    implementation(libs.moshi)
+    implementation(libs.moshi.kotlin)
+    implementation(libs.converter.moshi)
+    ksp(libs.moshi.ksp)
+
+    implementation(project(":data"))
+    implementation(project(":domain"))
+
+    debugImplementation(libs.chucker)
+    releaseImplementation(libs.chucker.no.op)
+
+    implementation(libs.bundles.room)
+    ksp(libs.room.compiler)
+    annotationProcessor(libs.room.compiler)
+    testImplementation(libs.room.testing)
 }
