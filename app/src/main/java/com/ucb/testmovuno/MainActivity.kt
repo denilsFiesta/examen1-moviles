@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.ucb.testmovuno.myfavoritebooks.MyFavoriteBooksUI
+import com.ucb.testmovuno.navigation.AppNavigation
 import com.ucb.testmovuno.searchbooks.SearchBooksUI
 import com.ucb.testmovuno.ui.theme.TestmovunoTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MyFavoriteBooksUI()
+            AppNavigation()
         }
     }
 }

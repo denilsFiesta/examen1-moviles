@@ -18,7 +18,7 @@ import com.ucb.domain.Book
 
 
 @Composable
-fun SearchBooksUI() {
+fun SearchBooksUI(onBack: () -> Unit) {
     val viewModel: SearchBooksViewModel = hiltViewModel()
 
     var query by remember { mutableStateOf("") }
@@ -33,7 +33,7 @@ fun SearchBooksUI() {
     ) {
         // Botón Volver
         Button(
-            onClick = { /* TODO: Navegación hacia atrás */ },
+            onClick = onBack,
             modifier = Modifier.padding(bottom = 16.dp)
         ) {
             Text("← Volver")

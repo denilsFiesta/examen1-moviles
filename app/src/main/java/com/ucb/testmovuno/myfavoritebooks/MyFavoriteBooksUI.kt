@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun MyFavoriteBooksUI() {
+fun MyFavoriteBooksUI(onBack: () -> Unit ) {
     val viewModel: MyFavoriteBooksViewModel = hiltViewModel()
     val favoriteBooks by viewModel.favoriteBooks.collectAsState()
 
@@ -26,7 +26,7 @@ fun MyFavoriteBooksUI() {
             .padding(16.dp)
     ) {
         Button(
-            onClick = { /* TODO: Navegación hacia atrás */ },
+            onClick = onBack,
             modifier = Modifier.padding(bottom = 16.dp)
         ) {
             Text("← Volver")
