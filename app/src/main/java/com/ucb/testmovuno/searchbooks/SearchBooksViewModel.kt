@@ -3,6 +3,7 @@ package com.ucb.testmovuno.searchbooks
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ucb.domain.Book
+import com.ucb.usecases.AddToMyFavorites
 import com.ucb.usecases.SearchBooks
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchBooksViewModel @Inject constructor(
-    private val searchBooks: SearchBooks
+    private val searchBooks: SearchBooks,
+    private val addToMyFavorites: AddToMyFavorites
 ) : ViewModel() {
 
     sealed class BookState {
@@ -29,6 +31,12 @@ class SearchBooksViewModel @Inject constructor(
             _flow.value = BookState.Loading
             val result = searchBooks.invoke(query)
             _flow.value = BookState.Successful(result)
+        }
+    }
+
+    fun addToFavorites(book: Book) {
+        viewModelScope.launch {
+            addToMyFavorites.invoke(book)
         }
     }
 }

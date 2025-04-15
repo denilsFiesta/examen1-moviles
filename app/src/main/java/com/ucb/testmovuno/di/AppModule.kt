@@ -2,10 +2,13 @@ package com.ucb.ucbtest.di
 
 import android.content.Context
 import com.ucb.data.BookRepository
+import com.ucb.data.book.IBookLocalDataSource
 import com.ucb.data.book.IBookRemoteDataSource
+import com.ucb.framework.book.BookLocalDataSource
 import com.ucb.framework.book.BookRemoteDataSource
 import com.ucb.framework.service.IApiService
 import com.ucb.framework.service.RetrofitClient
+import com.ucb.usecases.AddToMyFavorites
 import com.ucb.usecases.SearchBooks
 import dagger.Module
 import dagger.Provides
@@ -31,14 +34,26 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideBookRepository(remoteDataSource: IBookRemoteDataSource): BookRepository {
-        return BookRepository(remoteDataSource)
+    fun provideBookRepository(remoteDataSource: IBookRemoteDataSource, localDataSource: IBookLocalDataSource): BookRepository {
+        return BookRepository(remoteDataSource, localDataSource)
     }
 
     @Provides
     @Singleton
     fun provideSearchBooks(repository: BookRepository): SearchBooks {
         return SearchBooks(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideBookLocalDataSource(@ApplicationContext context: Context) : IBookLocalDataSource {
+        return BookLocalDataSource(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAddToMyFavorites(repository: BookRepository): AddToMyFavorites {
+        return AddToMyFavorites(repository)
     }
 
 }
