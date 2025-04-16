@@ -14,6 +14,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.ui.platform.LocalContext
 import com.ucb.domain.Book
 
 
@@ -25,6 +26,8 @@ fun SearchBooksUI(onBack: () -> Unit) {
     val state by viewModel.flow.collectAsState()
 
     val favoriteBooks = remember { mutableStateListOf<Book>() }
+
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -51,9 +54,7 @@ fun SearchBooksUI(onBack: () -> Unit) {
 
         // Botón Buscar
         Button(
-            onClick = {
-                viewModel.search(query)
-            },
+            onClick = { viewModel.search(context, query) },
             modifier = Modifier.fillMaxWidth(),
             enabled = query.isNotBlank()
         ) {
@@ -65,11 +66,15 @@ fun SearchBooksUI(onBack: () -> Unit) {
         // UI según el estado
         when (val current = state) {
             is SearchBooksViewModel.BookState.Init -> {
-                Text("Ingresa una búsqueda para comenzar.")
+                Text("Ingrese una búsqueda para comenzar.")
             }
 
             is SearchBooksViewModel.BookState.Loading -> {
                 CircularProgressIndicator()
+            }
+
+            is SearchBooksViewModel.BookState.Error -> {
+                Text("Error ${current.message}", color = MaterialTheme.colorScheme.error)
             }
 
             is SearchBooksViewModel.BookState.Successful -> {
@@ -78,9 +83,9 @@ fun SearchBooksUI(onBack: () -> Unit) {
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(current.books) { book ->
-                        Card(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
+                        val isFavorite = favoriteBooks.contains(book)
+
+                        Card(modifier = Modifier.fillMaxWidth()) {
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -92,20 +97,17 @@ fun SearchBooksUI(onBack: () -> Unit) {
                                     Text("Autores: ${book.authors.joinToString()}", style = MaterialTheme.typography.bodyMedium)
                                 }
 
-                                val isFavorite = favoriteBooks.contains(book)
-
                                 IconButton(onClick = {
                                     if (!isFavorite) {
                                         viewModel.addToFavorites(book)
                                         favoriteBooks.add(book)
                                     } else {
                                         favoriteBooks.remove(book)
-                                        // hago el eliminar??
                                     }
                                 }) {
                                     Icon(
                                         imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                                        contentDescription = if (isFavorite) "Remover de favoritos" else "Agregar a favoritos"
+                                        contentDescription = "Favorito"
                                     )
                                 }
                             }
@@ -113,7 +115,7 @@ fun SearchBooksUI(onBack: () -> Unit) {
                     }
                 }
             }
-
         }
+
     }
 }

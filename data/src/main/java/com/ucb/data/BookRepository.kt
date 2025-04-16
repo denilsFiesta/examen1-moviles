@@ -8,7 +8,7 @@ class BookRepository (
     val bookRemoteDataSource: IBookRemoteDataSource,
     val bookLocalDataSource: IBookLocalDataSource
 ) {
-    suspend fun searchByQuery(query: String): List<Book> {
+    suspend fun searchByQuery(query: String): NetworkResult<List<Book>>{
         return bookRemoteDataSource.searchByQuery(query)
     }
 
